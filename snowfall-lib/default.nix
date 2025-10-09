@@ -51,7 +51,7 @@ let
   get-libs =
     attrs:
     fold
-      (acc: name:
+      (name: acc:
         let value = attrs.${name}; in
         if builtins.isAttrs (value.lib or null)
         then acc // { ${name} = value.lib; }
