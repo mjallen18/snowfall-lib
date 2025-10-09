@@ -226,7 +226,7 @@ let
             value = flake-outputs.packages.${system} // {
               homeConfigurations = pipe homes [
                 (filterAttrs (_: home: home.system == system))
-                (mapAttrs (home-name: _: flake-outputs.homeConfigurations.${home-name}))
+                (mapAttrs (home-name: _: flake-outputs.homeConfigurations.${home-name}.activationPackage))
                 (mapAttrs' (
                   name: value:
                   nameValuePair (if hasSuffix "@${system}" name then removeSuffix "@${system}" name else name) value
