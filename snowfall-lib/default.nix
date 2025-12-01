@@ -50,7 +50,7 @@ let
   #   result: { x = nixpkgs.lib; }
   get-libs =
     attrs:
-    fold (
+    foldr (
       name: acc:
       let
         value = attrs.${name};
