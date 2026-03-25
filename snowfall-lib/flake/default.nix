@@ -193,7 +193,13 @@ let
       namespace = snowfall-config.namespace or "internal";
       custom-flake-options = flake.without-snowfall-options full-flake-options;
       alias = full-flake-options.alias or { };
-      homes = snowfall-lib.home.create-homes (full-flake-options.homes or { });
+      homes = snowfall-lib.home.create-homes (
+        (full-flake-options.homes or { })
+        // {
+          modules =
+            (full-flake-options.homes.modules or [ ]) ++ (full-flake-options.systems.modules.home or [ ]);
+        }
+      );
       systems = snowfall-lib.system.create-systems {
         systems = full-flake-options.systems or { };
         homes = full-flake-options.homes or { };

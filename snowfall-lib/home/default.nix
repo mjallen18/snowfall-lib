@@ -219,7 +219,7 @@ in
             module-path: module: args:
             (module args)
             // {
-              _file = "${user-homes-root}/${module-path}/default.nix";
+              _file = "${user-modules-root}/home/${module-path}/default.nix";
             }
           ) user-home-modules;
 
