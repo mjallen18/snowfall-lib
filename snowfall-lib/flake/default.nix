@@ -193,16 +193,16 @@ let
       namespace = snowfall-config.namespace or "internal";
       custom-flake-options = flake.without-snowfall-options full-flake-options;
       alias = full-flake-options.alias or { };
-      homes = snowfall-lib.home.create-homes (
-        (full-flake-options.homes or { })
-        // {
-          modules =
-            (full-flake-options.homes.modules or [ ]) ++ (full-flake-options.systems.modules.home or [ ]);
-        }
-      );
+      # Merge systems.modules.home into the homes attrset so it is available
+      # in both standalone homeConfigurations and NixOS-integrated homes.
+      homes-with-system-modules = (full-flake-options.homes or { }) // {
+        modules =
+          (full-flake-options.homes.modules or [ ]) ++ (full-flake-options.systems.modules.home or [ ]);
+      };
+      homes = snowfall-lib.home.create-homes homes-with-system-modules;
       systems = snowfall-lib.system.create-systems {
         systems = full-flake-options.systems or { };
-        homes = full-flake-options.homes or { };
+        homes = homes-with-system-modules;
       };
       hosts = snowfall-lib.attrs.merge-shallow [
         (full-flake-options.systems.hosts or { })
